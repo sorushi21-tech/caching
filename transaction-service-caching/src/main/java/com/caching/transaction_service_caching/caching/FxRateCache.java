@@ -16,4 +16,12 @@ public class FxRateCache<K, V> {
     public void put(K key, V value){
         fxRateCache.put(key, value);
     }
+
+    public void remove(K key){
+        fxRateCache.remove(key);
+    }
+
+    public void clear() {
+        fxRateCache.clear();
+    }
 }
