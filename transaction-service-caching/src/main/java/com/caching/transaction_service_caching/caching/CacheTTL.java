@@ -15,7 +15,7 @@ public class CacheTTL {
     private final FxRateCache<String, BigDecimal> fxRateCache;
 
     // Runs every 10 minutes
-    @Scheduled(cron = "0 */10 * * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void refreshCache() {
 
         log.info("Refreshing cache");
