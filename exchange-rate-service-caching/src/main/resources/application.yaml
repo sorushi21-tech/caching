@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: exchange-rate-service-caching
+
+server:
+  port: 8081
