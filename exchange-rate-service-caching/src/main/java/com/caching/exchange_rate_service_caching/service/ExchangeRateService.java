@@ -1,12 +1,13 @@
 package com.caching.exchange_rate_service_caching.service;
 
-import com.caching.exchange_rate_service_caching.repository.ExchangeRateRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.caching.exchange_rate_service_caching.repository.ExchangeRateRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -15,12 +16,11 @@ public class ExchangeRateService {
 
     private final ExchangeRateRepository exchangeRateRepository;
 
-    public BigDecimal convert(String from, String to, BigDecimal amount) {
+    public BigDecimal findRate(String from, String to) {
         return exchangeRateRepository.findRate(from, to)
                 .map(rate -> {
-                    BigDecimal converted = amount.multiply(rate).setScale(2, RoundingMode.HALF_UP);
-                    log.debug("Converted amount using rate {}: from={} to={} amount={} converted={}", rate, from, to, amount, converted);
-                    return converted;
+                    log.debug("Rate lookup successful: from={} to={} rate={}", from, to, rate);
+                    return rate;
                 })
                 .orElseThrow(() -> {
                     log.warn("Exchange rate not available for from={} to={}", from, to);

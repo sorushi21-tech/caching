@@ -1,9 +1,7 @@
 package com.caching.exchange_rate_service_caching.controller;
 
-import com.caching.exchange_rate_service_caching.dto.ConversionResponse;
-import com.caching.exchange_rate_service_caching.service.ExchangeRateService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Locale;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
-import java.util.Locale;
+import com.caching.exchange_rate_service_caching.dto.RateResponse;
+import com.caching.exchange_rate_service_caching.service.ExchangeRateService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -22,24 +23,22 @@ public class ExchangeRateController {
 
     private final ExchangeRateService exchangeRateService;
 
-    @GetMapping("/convert")
-    public ConversionResponse convert(@RequestParam String from,
-                                      @RequestParam String to,
-                                      @RequestParam BigDecimal amount) {
+    @GetMapping("/rate")
+    public RateResponse getRate(@RequestParam String from,
+                                @RequestParam String to) {
 
-        log.info("Conversion request received: from={} to={} amount={}", from, to, amount);
+        log.info("Rate request received: from={} to={}", from, to);
 
         try {
-            BigDecimal convertedAmount = exchangeRateService.convert(from, to, amount);
-            log.debug("Conversion successful: from={} to={} amount={} convertedAmount={}", from, to, amount, convertedAmount);
-            return new ConversionResponse(
+            var rate = exchangeRateService.findRate(from, to);
+            log.debug("Rate lookup successful: from={} to={} rate={}", from, to, rate);
+            return new RateResponse(
                     from.toUpperCase(Locale.ROOT),
                     to.toUpperCase(Locale.ROOT),
-                    amount,
-                    convertedAmount
+                    rate
             );
         } catch (IllegalArgumentException ex) {
-            log.warn("Conversion failed: from={} to={} amount={} reason={}", from, to, amount, ex.getMessage());
+            log.warn("Rate lookup failed: from={} to={} reason={}", from, to, ex.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage());
         }
     }

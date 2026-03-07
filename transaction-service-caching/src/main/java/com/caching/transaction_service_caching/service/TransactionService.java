@@ -1,18 +1,24 @@
 package com.caching.transaction_service_caching.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
 import com.caching.transaction_service_caching.client.ExchangeRateClient;
 import com.caching.transaction_service_caching.dto.CategorySummaryResponse;
 import com.caching.transaction_service_caching.dto.TransactionRequest;
 import com.caching.transaction_service_caching.model.Transaction;
 import com.caching.transaction_service_caching.repository.CategoryCurrencyTotalProjection;
 import com.caching.transaction_service_caching.repository.TransactionRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.*;
 
 @Slf4j
 @Service
@@ -52,12 +58,15 @@ public class TransactionService {
 
         for (CategoryCurrencyTotalProjection projection : projections) {
 
-            log.debug("Converting projection category={} fromCurrency={} amount={}", projection.getCategory(), projection.getCurrency(), projection.getTotalAmount());
-            BigDecimal convertedAmount = exchangeRateClient.convertAmount(
+            log.debug("Fetching rate for projection category={} fromCurrency={} targetCurrency={} amount={}", projection.getCategory(), projection.getCurrency(), targetCurrency, projection.getTotalAmount());
+            BigDecimal rate = exchangeRateClient.getRate(
                     projection.getCurrency(),
-                    targetCurrency,
-                    projection.getTotalAmount()
+                    targetCurrency
             );
+
+            BigDecimal convertedAmount = projection.getTotalAmount()
+                    .multiply(rate)
+                    .setScale(2, RoundingMode.HALF_UP);
 
             totalsByCategory.merge(projection.getCategory(), convertedAmount, BigDecimal::add);
         }
