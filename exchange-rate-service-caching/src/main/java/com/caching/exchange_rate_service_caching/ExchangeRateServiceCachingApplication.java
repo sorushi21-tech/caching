@@ -1,13 +1,13 @@
-package com.caching.transactionService;
+package com.caching.exchange_rate_service_caching;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TransactionServiceCachingApplication {
+public class ExchangeRateServiceCachingApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TransactionServiceCachingApplication.class, args);
+        SpringApplication.run(ExchangeRateServiceCachingApplication.class, args);
     }
 
 }

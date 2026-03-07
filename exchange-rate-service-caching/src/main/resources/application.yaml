@@ -4,3 +4,7 @@ spring:
 
 server:
   port: 8081
+
+frankfurter:
+  api:
+    base-url: https://api.frankfurter.dev/v1
