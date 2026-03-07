@@ -1,6 +1,13 @@
 spring:
   application:
     name: transaction-service-caching
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/transaction_db
 
 server:
-  port: 8082
+  port: 8080
+
+exchange:
+  service:
+    base-url: http://localhost:8081
