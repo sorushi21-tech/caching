@@ -1,8 +1,0 @@
-spring:
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/transaction_test
-
-exchange:
-  service:
-    base-url: http://localhost:8081

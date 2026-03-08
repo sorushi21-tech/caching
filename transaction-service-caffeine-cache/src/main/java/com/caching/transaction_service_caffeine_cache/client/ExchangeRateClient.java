@@ -2,6 +2,8 @@ package com.caching.transaction_service_caffeine_cache.client;
 
 import com.caching.transaction_service_caffeine_cache.config.CacheConfig;
 import com.caching.transaction_service_caffeine_cache.dto.ExchangeRateResponse;
+import java.math.BigDecimal;
+import java.util.Locale;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
@@ -11,68 +13,79 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.math.BigDecimal;
-import java.util.Locale;
-
 @Slf4j
 @Component
 public class ExchangeRateClient {
 
-    private final RestTemplate restTemplate;
-    private final String exchangeServiceBaseUrl;
+  private final RestTemplate restTemplate;
+  private final String exchangeServiceBaseUrl;
 
-    public ExchangeRateClient(
-            RestTemplate restTemplate,
-            @Value("${exchange.service.base-url}") String exchangeServiceBaseUrl
-    ) {
-        this.restTemplate = restTemplate;
-        this.exchangeServiceBaseUrl = exchangeServiceBaseUrl;
+  public ExchangeRateClient(
+      RestTemplate restTemplate,
+      @Value("${exchange.service.base-url}") String exchangeServiceBaseUrl) {
+    this.restTemplate = restTemplate;
+    this.exchangeServiceBaseUrl = exchangeServiceBaseUrl;
+  }
+
+  @Cacheable(value = CacheConfig.FX_RATES_CACHE, key = "#fromCurrency + ':' + #toCurrency")
+  public BigDecimal getRate(String fromCurrency, String toCurrency) {
+
+    log.info(
+        "Cache miss — fetching rate from exchange-rate-service for {} -> {}",
+        fromCurrency,
+        toCurrency);
+
+    String normalizedFrom = fromCurrency.toUpperCase(Locale.ROOT);
+    String normalizedTo = toCurrency.toUpperCase(Locale.ROOT);
+
+    if (normalizedFrom.equals(normalizedTo)) {
+      log.debug("Skipping exchange-rate-service call for identical currencies: {}", normalizedFrom);
+      return BigDecimal.ONE;
     }
 
-    @Cacheable(value = CacheConfig.FX_RATES_CACHE, key = "#fromCurrency + ':' + #toCurrency")
-    public BigDecimal getRate(String fromCurrency, String toCurrency) {
+    String uri =
+        UriComponentsBuilder.fromUriString(exchangeServiceBaseUrl)
+            .path("/rate")
+            .queryParam("from", normalizedFrom)
+            .queryParam("to", normalizedTo)
+            .toUriString();
 
-        log.info("Cache miss — fetching rate from exchange-rate-service for {} -> {}", fromCurrency, toCurrency);
+    try {
+      ExchangeRateResponse exchangeResponse =
+          restTemplate.getForObject(uri, ExchangeRateResponse.class);
 
-        String normalizedFrom = fromCurrency.toUpperCase(Locale.ROOT);
-        String normalizedTo = toCurrency.toUpperCase(Locale.ROOT);
+      if (exchangeResponse == null || exchangeResponse.rate() == null) {
+        log.error(
+            "Exchange-rate-service returned empty rate response for from={} to={}",
+            normalizedFrom,
+            normalizedTo);
+        throw new IllegalStateException("Unable to fetch exchange rate from exchange-rate-service");
+      }
 
-        if (normalizedFrom.equals(normalizedTo)) {
-            log.debug("Skipping exchange-rate-service call for identical currencies: {}", normalizedFrom);
-            return BigDecimal.ONE;
-        }
-
-        String uri = UriComponentsBuilder
-                .fromUriString(exchangeServiceBaseUrl)
-                .path("/rate")
-                .queryParam("from", normalizedFrom)
-                .queryParam("to", normalizedTo)
-                .toUriString();
-
-        try {
-            ExchangeRateResponse exchangeResponse = restTemplate.getForObject(uri, ExchangeRateResponse.class);
-
-            if (exchangeResponse == null || exchangeResponse.rate() == null) {
-                log.error("Exchange-rate-service returned empty rate response for from={} to={}", normalizedFrom, normalizedTo);
-                throw new IllegalStateException("Unable to fetch exchange rate from exchange-rate-service");
-            }
-
-            log.debug("Rate received from exchange-rate-service: from={} to={} rate={}", normalizedFrom, normalizedTo, exchangeResponse.rate());
-            return exchangeResponse.rate();
-        } catch (RestClientException ex) {
-            log.error("Failed to call exchange-rate-service for rate from={} to={}", normalizedFrom, normalizedTo, ex);
-            throw new IllegalStateException("Unable to fetch exchange rate from exchange-rate-service", ex);
-        }
+      log.debug(
+          "Rate received from exchange-rate-service: from={} to={} rate={}",
+          normalizedFrom,
+          normalizedTo,
+          exchangeResponse.rate());
+      return exchangeResponse.rate();
+    } catch (RestClientException ex) {
+      log.error(
+          "Failed to call exchange-rate-service for rate from={} to={}",
+          normalizedFrom,
+          normalizedTo,
+          ex);
+      throw new IllegalStateException(
+          "Unable to fetch exchange rate from exchange-rate-service", ex);
     }
+  }
 
-    @CacheEvict(value = CacheConfig.FX_RATES_CACHE, key = "#fromCurrency + ':' + #toCurrency")
-    public void evictRate(String fromCurrency, String toCurrency) {
-        log.info("Evicting cached rate for {} -> {}", fromCurrency, toCurrency);
-    }
+  @CacheEvict(value = CacheConfig.FX_RATES_CACHE, key = "#fromCurrency + ':' + #toCurrency")
+  public void evictRate(String fromCurrency, String toCurrency) {
+    log.info("Evicting cached rate for {} -> {}", fromCurrency, toCurrency);
+  }
 
-    @CacheEvict(value = CacheConfig.FX_RATES_CACHE, allEntries = true)
-    public void evictAllRates() {
-        log.info("Evicting all cached exchange rates");
-    }
+  @CacheEvict(value = CacheConfig.FX_RATES_CACHE, allEntries = true)
+  public void evictAllRates() {
+    log.info("Evicting all cached exchange rates");
+  }
 }
-

@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: transaction-service-redis-cache
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/transaction_db
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 1
+          max-wait: 1000ms
+
+server:
+  port: 8080
+
+exchange:
+  service:
+    base-url: http://localhost:8081
+
+cache:
+  fx-rate:
+    ttl-seconds: 600

@@ -4,6 +4,5 @@ import java.util.List;
 
 public interface TransactionSummaryRepository {
 
-    List<CategoryCurrencyTotalProjection> findCategoryCurrencyTotals();
+  List<CategoryCurrencyTotalProjection> findCategoryCurrencyTotals();
 }
-
