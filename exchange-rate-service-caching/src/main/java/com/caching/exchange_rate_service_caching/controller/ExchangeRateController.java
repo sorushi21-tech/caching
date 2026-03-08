@@ -1,7 +1,9 @@
 package com.caching.exchange_rate_service_caching.controller;
 
-import java.util.Locale;
-
+import com.caching.exchange_rate_service_caching.dto.RateResponse;
+import com.caching.exchange_rate_service_caching.service.ExchangeRateService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,11 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.caching.exchange_rate_service_caching.dto.RateResponse;
-import com.caching.exchange_rate_service_caching.service.ExchangeRateService;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.Locale;
 
 @Slf4j
 @RestController

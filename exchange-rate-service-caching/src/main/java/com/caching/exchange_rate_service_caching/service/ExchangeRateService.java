@@ -1,13 +1,11 @@
 package com.caching.exchange_rate_service_caching.service;
 
-import java.math.BigDecimal;
-
-import org.springframework.stereotype.Service;
-
 import com.caching.exchange_rate_service_caching.repository.ExchangeRateRepository;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Slf4j
 @Service

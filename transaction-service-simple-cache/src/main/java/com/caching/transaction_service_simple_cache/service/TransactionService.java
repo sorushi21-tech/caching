@@ -1,11 +1,11 @@
-package com.caching.transaction_service_caching.service;
+package com.caching.transaction_service_simple_cache.service;
 
-import com.caching.transaction_service_caching.client.ExchangeRateClient;
-import com.caching.transaction_service_caching.dto.CategorySummaryResponse;
-import com.caching.transaction_service_caching.dto.TransactionRequest;
-import com.caching.transaction_service_caching.model.Transaction;
-import com.caching.transaction_service_caching.repository.CategoryCurrencyTotalProjection;
-import com.caching.transaction_service_caching.repository.TransactionRepository;
+import com.caching.transaction_service_simple_cache.client.ExchangeRateClient;
+import com.caching.transaction_service_simple_cache.dto.CategorySummaryResponse;
+import com.caching.transaction_service_simple_cache.dto.TransactionRequest;
+import com.caching.transaction_service_simple_cache.model.Transaction;
+import com.caching.transaction_service_simple_cache.repository.CategoryCurrencyTotalProjection;
+import com.caching.transaction_service_simple_cache.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,3 +74,4 @@ public class TransactionService {
         return response;
     }
 }
+
