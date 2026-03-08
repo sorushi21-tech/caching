@@ -13,12 +13,8 @@ public class FxRateCache<K, V> {
         return fxRateCache.get(key);
     }
 
-    public void put(K key, V value){
+    public void put(K key, V value) {
         fxRateCache.put(key, value);
-    }
-
-    public void remove(K key){
-        fxRateCache.remove(key);
     }
 
     public void clear() {

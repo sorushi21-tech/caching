@@ -8,8 +8,9 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <artifactId>exchange-rate-service-caching</artifactId>
-    <name>exchange-rate-service-caching</name>
-    <description>exchange-rate-service-caching</description>
+    <artifactId>transaction-service-simple-cache</artifactId>
+    <name>transaction-service-simple-cache</name>
+    <description>Transaction service using Spring SimpleCacheManager</description>
 
 </project>
+
