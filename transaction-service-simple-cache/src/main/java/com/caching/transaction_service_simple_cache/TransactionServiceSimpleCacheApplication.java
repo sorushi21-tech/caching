@@ -10,8 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class TransactionServiceSimpleCacheApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(TransactionServiceSimpleCacheApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(TransactionServiceSimpleCacheApplication.class, args);
+  }
 }
-

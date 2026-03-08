@@ -4,10 +4,9 @@ import java.math.BigDecimal;
 
 public interface CategoryCurrencyTotalProjection {
 
-    String getCategory();
+  String getCategory();
 
-    String getCurrency();
+  String getCurrency();
 
-    BigDecimal getTotalAmount();
+  BigDecimal getTotalAmount();
 }
-
