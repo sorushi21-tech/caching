@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: transaction-service-caffeine-cache
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/transaction_db
+  cache:
+    type: caffeine
+
+server:
+  port: 8080
+
+exchange:
+  service:
+    base-url: http://localhost:8081
+
