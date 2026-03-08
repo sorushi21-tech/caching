@@ -1,75 +1,208 @@
+# ============================================================
+# Universal .gitignore
+# React | Angular | Java Spring Boot | Docker | Helm
+# ============================================================
+
+
 # ======================
 # Dependencies
 # ======================
 node_modules/
 .pnp/
 .pnp.js
+bower_components/
+
+# Java / Maven / Gradle
+target/
+.gradle/
+gradle-wrapper.jar
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
 
 # ======================
-# Production build
+# Production Build Output
 # ======================
-build/
 dist/
 out/
+.next/
+.nuxt/
+.vite/
+.angular/
+.cache/
+
 
 # ======================
-# Environment variables
+# Environment & Secrets
 # ======================
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.cert
+*.p12
+*.jks
+*.keystore
+secrets/
+secret.yaml
+secret.yml
+
 
 # ======================
 # Logs
 # ======================
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-logs/
-*.log
+lerna-debug.log*
+hs_err_pid*
+replay_pid*
+
 
 # ======================
-# OS files
+# OS Files
 # ======================
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
-packet-lock.json
+desktop.ini
+
 
 # ======================
-# Editor & IDE files
+# Editor & IDE
 # ======================
 .vscode/
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+*.sw?
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+.settings/
+.factorypath
+*.launch
+
 
 # ======================
-# Cache & temp files
+# Java / Spring Boot
 # ======================
-.cache/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+*.war
+*.ear
+*.nar
+spring-shell.log
+/out/
+MANIFEST.MF
+
+# Spring Boot specific
+application-local.properties
+application-local.yml
+application-dev.properties
+application-dev.yml
+
+
+# ======================
+# Cache & Temp
+# ======================
 .eslintcache
+.stylelintcache
 *.tsbuildinfo
-coverage/
 .tmp/
 .temp/
+tmp/
+temp/
+.sass-cache/
+*.tgz
+.yarn-integrity
+
 
 # ======================
-# Testing
+# Testing & Coverage
 # ======================
 coverage/
+.nyc_output/
+test-results/
+test-output/
+surefire-reports/
+failsafe-reports/
+*.lcov
+
 
 # ======================
-# Optional (Next.js specific)
+# Docker
 # ======================
-.next/
+.dockerignore
+docker-compose.override.yml
+docker-compose.local.yml
+.docker/
+
 
 # ======================
-# Optional (Vite specific)
+# Helm
 # ======================
-.vite/
+charts/
+*.tgz
+.helm/
+Chart.lock
+
+
+# ======================
+# Kubernetes
+# ======================
+kubeconfig
+*.kubeconfig
+kube-config
+
+
+# ======================
+# Terraform (if any IaC)
+# ======================
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+
+# ======================
+# Package Manager Locks
+# (keep only one, delete others)
+# ======================
+# Uncomment the lock files you do NOT use:
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+
+# ======================
+# Miscellaneous
+# ======================
+*.pid
+*.seed
+*.pid.lock
+.node_repl_history
+.npm/
+.eslintcache
+.parcel-cache/
+*.snap
