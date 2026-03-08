@@ -26,6 +26,7 @@
         <module>exchange-rate-service-caching</module>
         <module>transaction-service-caching</module>
         <module>transaction-service-simple-cache</module>
+        <module>transaction-service-caffeine-cache</module>
     </modules>
 
     <dependencies>
