@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>com.caching</groupId>
-    <artifactId>caching-concurrenthashmap</artifactId>
+    <artifactId>caching-in-memory</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>caching-concurrenthashmap</name>
+    <name>caching-in-memory</name>
     <description>Parent project for independent caching services</description>
 
     <properties>
