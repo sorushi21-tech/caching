@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>com.caching</groupId>
-    <artifactId>caching-in-memory</artifactId>
+    <artifactId>caching</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>caching-in-memory</name>
+    <name>caching</name>
     <description>Parent project for independent caching services</description>
 
     <properties>
